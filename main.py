@@ -77,7 +77,7 @@ def main(page: ft.Page):
         expand=True,
         style=ft.MenuStyle(
             alignment=ft.alignment.top_left,
-            bgcolor=ft.colors.BLUE_400,
+            bgcolor= ft.colors.BLUE_400,
             mouse_cursor={ft.MaterialState.HOVERED: ft.MouseCursor.WAIT,
                           ft.MaterialState.DEFAULT: ft.MouseCursor.ZOOM_OUT},
         ),
@@ -86,6 +86,7 @@ def main(page: ft.Page):
                 content=ft.Text("File"),
                 on_open=handle_on_open,
                 on_close=handle_on_close,
+                #style=ft.ButtonStyle(bgcolor={ft.MaterialState.HOVERED: ft.colors.GREEN_500}),
                 on_hover=handle_on_hover,
                 controls=[
                     ft.MenuItemButton(
@@ -109,9 +110,8 @@ def main(page: ft.Page):
                 ]
             ),
             ft.MenuItemButton(
-                        content=ft.Text("Инструкция по работе с программой"),
-                        leading=ft.Icon(ft.icons.INFO),
-                        style=ft.ButtonStyle(bgcolor={ft.MaterialState.HOVERED: ft.colors.GREEN_500}),
+                        content=ft.Text("Инструкция по работе с программой"),                        
+                        #style=ft.ButtonStyle(bgcolor={ft.MaterialState.HOVERED: ft.colors.GREEN_500}),
                         on_click=handle_menu_item_click
                     )
         ]
