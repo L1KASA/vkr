@@ -1,3 +1,6 @@
+from docx.shared import Pt, Cm
+from docx.enum.text import WD_LINE_SPACING
+from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx import Document
 import matplotlib
 import matplotlib.pyplot as plt
@@ -6,6 +9,9 @@ from flet import Page,TextField
 import flet as ft
 from flet.matplotlib_chart import MatplotlibChart
 import os
+from docx.shared import Pt
+from docx.enum.text import WD_PARAGRAPH_ALIGNMENT
+from docx.enum.text import WD_LINE_SPACING
 
 matplotlib.use("svg")
 temp_filename = "temp_plot.png"
@@ -237,7 +243,10 @@ def main(page: ft.Page):
     
 
     def mysavefile(e:ft.FilePickerResultEvent):
-        
+        if not os.path.exists(temp_filename):
+            print(f"Путь к файлу '{temp_filename}' не существует.")
+            page.show_snack_bar(ft.SnackBar(content=ft.Text("Ошибка! Графики не были нарисованы.")))
+            return
         print(temp_filename)
         save_loc = e.path
         if not save_loc:
@@ -246,14 +255,33 @@ def main(page: ft.Page):
             return
         
         document = Document()
+        style = document.styles['Normal']
+        style.font.name = 'Times New Roman'
+        style.font.size = Pt(14)
+        p = document.add_paragraph()
+        run = p.add_run("Графики и данные").bold = True
 
         # Добавляем заголовок
-        document.add_heading("Графики и данные", level=1)
- # Добавляем первый график и надпись
-        document.add_heading("График синуса", level=2)
+        # Устанавливаем интервал до и после абзаца
+        style.paragraph_format.space_before = Pt(0)
+        style.paragraph_format.space_after = Pt(0)
+        # Устанавливаем интервал между строками
+        style.paragraph_format.line_spacing_rule = WD_LINE_SPACING.ONE_POINT_FIVE
+        # Устанавливаем выравнивание по ширине
+        style.paragraph_format.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
         
         document.add_picture(temp_filename)
-        document.add_paragraph(f"Первый набор данных: {float(tb4.value)}")
+        style = document.paragraphs[-1]
+        style.alignment = 1  # 1 соответствует центру
+        #style.paragraph_format.first_line_indent = Cm(1.27)
+        #rr = document.add_paragraph(f"Первый набор данных: {float(tb4.value)}")
+        document.add_paragraph("Рисунок 1 – Исходный график с данными")
+        style = document.paragraphs[-1]
+        style.alignment = 1  # 1 соответствует центру
+        
+        rr = document.add_paragraph(f"Первый набор данных: {float(tb4.value)}")
+        rr.paragraph_format.first_line_indent = Cm(1.27)
+        #run = p.add_run('Графики и данные')
 
         
  # Сохраняем документ
