@@ -242,6 +242,7 @@ def main(page: ft.Page):
         save_loc = e.path
         if not save_loc:
             print("error save file", e)
+            page.show_snack_bar(ft.SnackBar(content=ft.Text("Ошибка! Документ не сохранился.")))
             return
         
         document = Document()
@@ -262,7 +263,7 @@ def main(page: ft.Page):
         document.save(save_loc)
         
         #messagebox.showinfo("Сохранение в docx", "Графики и данные успешно сохранены в документе Word.")
-#        
+        page.show_snack_bar(ft.SnackBar(content=ft.Text("Графики и данные успешно сохранены в документе Word")))
 #
         page.update()
 
